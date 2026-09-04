@@ -1,0 +1,841 @@
+@import "tailwindcss";
+
+/* ── Outer wrapper ─────────────────────────────────────────────────── */
+.page-wrapper {
+    display: flex;
+    min-height: 100vh;
+    align-items: stretch;
+}
+
+.side-border {
+    flex-shrink: 0;
+    width: 48px;
+    background-image: url("book-shelf-side.jpg");
+    background-size: cover;
+    background-position: center;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    box-shadow: inset -4px 0 12px rgba(0,0,0,0.4), inset 4px 0 12px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 540px) {
+    .side-border { width: 14px; }
+}
+
+/* ── Main page ─────────────────────────────────────────────────────── */
+.page {
+    @apply flex-1 min-h-screen overflow-y-auto bg-amber-950;
+    padding-top: 46px;
+}
+
+.form-page {
+    @apply min-h-screen bg-amber-950 flex items-center justify-center;
+}
+
+/* ── Toolbar shared ────────────────────────────────────────────────── */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background-image: url("book-shelf-back.jpg");
+    background-position: center;
+    backdrop-filter: blur(4px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.toolbar-hidden {
+    transform: translateY(-110%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Desktop toolbar: shown above 540px, hidden below */
+.toolbar-desktop {
+    display: flex;
+}
+.toolbar-mobile {
+    display: none;
+}
+
+@media (max-width: 540px) {
+    .toolbar-desktop { display: none; }
+    .toolbar-mobile  { display: flex; }
+}
+
+/* ── Mobile toolbar strip ──────────────────────────────────────────── */
+.toolbar-mobile {
+    justify-content: space-between;
+    padding: 7px 10px;
+    min-height: 42px;
+}
+
+.mobile-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.mobile-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(251,191,36,0.2);
+    border: 1px solid rgba(251,191,36,0.35);
+    color: #fde68a;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+.chip-clear {
+    background: none;
+    border: none;
+    color: #fde68a;
+    font-size: 0.6rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.7;
+}
+
+/* ── Hamburger button ──────────────────────────────────────────────── */
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 36px;
+    height: 36px;
+    padding: 6px 7px;
+    border-radius: 6px;
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    background: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+.hamburger-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: rgba(251, 191, 36, 0.8);
+}
+
+.hamburger-btn span {
+    display: block;
+    height: 2px;
+    background: #fde68a;
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+    transform-origin: center;
+}
+
+/* Animate to X when open */
+.hamburger-btn.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger-btn.open span:nth-child(2) { opacity: 0; }
+.hamburger-btn.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ── Mobile drawer ─────────────────────────────────────────────────── */
+.mobile-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(280px, 80vw);
+    background: #1c0f05;
+    background-image: url("book-shelf-back.jpg");
+    background-size: cover;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow-y: auto;
+    box-shadow: -6px 0 24px rgba(0,0,0,0.7);
+    padding: 20px 16px 32px;
+    gap: 4px;
+}
+
+.drawer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.drawer-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(253,230,138,0.5);
+}
+
+.drawer-search {
+    max-width: 100%;
+}
+
+.drawer-btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.drawer-sort-btn {
+    flex: 1;
+    min-width: 70px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.07);
+    color: #fde68a;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    text-align: center;
+}
+
+.drawer-sort-btn.active {
+    background: rgba(251,191,36,0.25);
+    border-color: rgba(251,191,36,0.55);
+    color: #fbbf24;
+}
+
+.drawer-sort-btn:hover:not(.active) {
+    background: rgba(255,255,255,0.12);
+}
+
+.drawer-done-btn {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(251,191,36,0.4);
+    background: rgba(251,191,36,0.15);
+    color: #fbbf24;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.15s;
+}
+
+.drawer-done-btn:hover {
+    background: rgba(251,191,36,0.25);
+}
+
+/* Backdrop */
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 40;
+}
+
+/* Transitions */
+.drawer-enter-active, .drawer-leave-active { transition: transform 0.25s ease; }
+.drawer-enter-from, .drawer-leave-to       { transform: translateX(100%); }
+
+.fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
+.fade-enter-from, .fade-leave-to       { opacity: 0; }
+
+/* ── Desktop toolbar internals ─────────────────────────────────────── */
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 2px;
+    flex-shrink: 0;
+}
+
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 100px;
+    max-width: 320px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 9px;
+  pointer-events: none;
+  color: #fde68a;
+}
+
+.icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  flex-shrink: 0;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.icon-search {
+  mask-image: url('/symbols/search.svg');
+  -webkit-mask-image: url('/symbols/search.svg');
+}
+.icon-star {
+  mask-image: url('/symbols/star.svg');
+  -webkit-mask-image: url('/symbols/star.svg');
+}
+.icon-arrow-up {
+  mask-image: url('/symbols/arrow-up.svg');
+  -webkit-mask-image: url('/symbols/arrow-up.svg');
+}
+.icon-arrow-down {
+  mask-image: url('/symbols/arrow-down.svg');
+  -webkit-mask-image: url('/symbols/arrow-down.svg');
+}
+.icon-arrow-left {
+  mask-image: url('/symbols/arrow-left.svg');
+  -webkit-mask-image: url('/symbols/arrow-left.svg');
+}
+.icon-arrow-right {
+  mask-image: url('/symbols/arrow-right.svg');
+  -webkit-mask-image: url('/symbols/arrow-right.svg');
+}
+
+.search-input {
+    width: 100%;
+    padding: 5px 28px 5px 30px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: #fde68a;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.search-input::placeholder {
+    color: rgba(253, 230, 138, 0.4);
+}
+
+.search-input:focus {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(251, 191, 36, 0.7);
+}
+
+.search-clear {
+    position: absolute;
+    right: 7px;
+    background: none;
+    border: none;
+    color: rgba(253, 230, 138, 0.5);
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    line-height: 1;
+    transition: color 0.15s;
+}
+
+.search-clear:hover { color: #fde68a; }
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    background: rgba(0, 0, 0, 0.5);
+    color: #fde68a;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.sort-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: rgba(251, 191, 36, 0.8);
+}
+
+.sort-btn span {
+    color: #fbbf24;
+    font-size: 0.7rem;
+}
+
+/* ── Shelf section ─────────────────────────────────────────────────── */
+.shelf-section {
+    display: flex;
+    flex-direction: column;
+    background-image: url("book-shelf-back.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* ── Series title area ─────────────────────────────────────────────── */
+.series-title-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 4px 12px;
+}
+
+.series-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 4px 8px;
+    color: #fff8e7;
+    text-shadow:
+        0 0 2px #000,
+        0 1px 5px rgba(0,0,0,0.95),
+        0 2px 12px rgba(0,0,0,0.8),
+        1px  1px 0 #2a0f00,
+        -1px -1px 0 #2a0f00,
+        1px -1px 0 #2a0f00,
+        -1px  1px 0 #2a0f00;
+    letter-spacing: 0.06em;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+@media (max-width: 540px) {
+    .series-title { font-size: 1.05rem; }
+}
+
+.volume-count {
+    font-size: 0.82rem;
+    font-weight: 500;
+    opacity: 0.75;
+    margin-left: 6px;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+/* ── Missing note — flows inline with flex title row ───────────────── */
+.missing-note {
+    background: #fef08a;
+    color: #713f12;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 8px 5px;
+    max-width: 180px;
+    box-shadow:
+        2px 3px 8px rgba(0,0,0,0.45),
+        inset 0 -2px 4px rgba(0,0,0,0.08);
+    transform: rotate(1.5deg);
+    line-height: 1.4;
+    border-top: 3px solid rgba(180,140,0,0.35);
+    flex-shrink: 0;
+}
+
+.missing-note-label {
+    display: block;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #92400e;
+    margin-bottom: 1px;
+}
+
+.missing-note-vols {
+    display: block;
+    word-break: break-word;
+}
+
+/* ── Shelf row ─────────────────────────────────────────────────────── */
+.row {
+    /* Height = covers + a little breathing room above them.
+       We use aspect-[2/3] on covers and clamp volume width,
+       so just set a fixed px that matches: vol-width * 3/2 + padding.
+       Mobile: vol=95px → cover-h≈143px → row≈163px
+       Tablet: vol=130px → cover-h≈195px → row≈215px
+       Desktop: vol=160px → cover-h≈240px → row≈264px          */
+    height: 170px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    overflow-x: auto;
+    overflow-y: visible;
+    gap: 6px;
+    padding: 12px 10px 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(251,191,36,0.3) transparent;
+}
+
+@media (min-width: 541px) {
+    .row { height: 220px; gap: 10px; padding: 16px 16px 0; }
+}
+
+@media (min-width: 1024px) {
+    .row { height: 270px; gap: 12px; padding: 20px 20px 0; }
+}
+
+/* ── Shelf floor ───────────────────────────────────────────────────── */
+.shelf-floor {
+    height: 30px;
+    flex-shrink: 0;
+    background-image: url("book-shelf-face.jpg");
+    background-size: cover;
+    background-position: center bottom;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65);
+}
+
+@media (min-width: 541px) { .shelf-floor { height: 36px; } }
+@media (min-width: 1024px) { .shelf-floor { height: 42px; } }
+
+.empty-shelf {
+    @apply flex items-center justify-center p-5 min-h-80 text-amber-700 cursor-pointer;
+}
+
+/* ── Volume tiles ──────────────────────────────────────────────────── */
+.fav-star {
+  color: #f5c518;
+  margin-right: 4px;
+}
+
+.volume {
+  position: relative;
+  width: 95px;
+}
+
+.vol-fav-star {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  color: #f5c518;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@media (min-width: 541px) { .volume { width: 130px; } }
+@media (min-width: 1024px) { .volume { width: 160px; } }
+
+.add-volume {
+    @apply w-full aspect-[2/3] flex items-center justify-center text-4xl text-amber-700 bg-amber-800 opacity-50 hover:opacity-100 cursor-pointer transition-opacity;
+}
+
+.cover {
+    @apply w-full aspect-[2/3] object-cover;
+}
+
+.volume-title {
+    width: 100%;
+    aspect-ratio: 2/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 12px;
+    background: linear-gradient(160deg, #4a2510 0%, #321508 60%, #221005 100%);
+    border: 1px solid rgba(251, 191, 36, 0.15);
+    border-radius: 2px;
+    box-shadow: inset -3px 0 8px rgba(0,0,0,0.5), inset 3px 0 4px rgba(255,255,255,0.03);
+    color: rgba(253, 230, 138, 0.7);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    position: relative;
+    overflow: hidden;
+}
+
+.volume-title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(251,191,36,0.3), transparent);
+}
+
+.volume-title::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.06) 3px,
+        rgba(0,0,0,0.06) 4px
+    );
+    pointer-events: none;
+}
+
+.vol-placeholder-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    color: rgba(253, 230, 138, 0.5);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.vol-placeholder-num {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: rgba(253, 230, 138, 0.8);
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+/* ── Add series btn ────────────────────────────────────────────────── */
+.add-series-btn {
+    display: block;
+    text-align: center;
+    padding: 20px 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: #d97706;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+    transition: color 0.2s;
+}
+.add-series-btn:hover { color: #fbbf24; }
+
+/* ── Forms & modals ────────────────────────────────────────────────── */
+.form-card {
+    @apply bg-white p-6 min-w-96 rounded-lg flex flex-col gap-4;
+}
+
+.modal-overlay {
+    @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+}
+
+.modal-hit-area {
+    padding: 24px;
+}
+
+.modal {
+    @apply bg-white p-6 rounded-lg flex flex-col gap-4;
+    width: min(90vw, 360px);
+}
+
+.modal-actions  { @apply flex gap-2; }
+.modal-title    { @apply text-xl font-bold; }
+.form-title     { @apply text-xl font-bold; }
+
+.error      { @apply text-red-500 text-sm; }
+.input      { @apply w-full border border-gray-300 rounded px-3 py-2; }
+.input-label { @apply text-sm text-gray-500 font-medium; }
+.preview    { @apply w-24 aspect-[2/3] object-cover; }
+.btn        { @apply text-lg font-semibold p-2 rounded-md; }
+.btn-ok     { @apply bg-green-200; }
+.btn-bad    { @apply bg-red-200; }
+
+/* ── Context menu ──────────────────────────────────────────────────── */
+.context-menu {
+  position: fixed;
+  z-index: 1000;
+  background: #1c0f05;
+  background-image: url("book-shelf-back.jpg");
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 6px;
+  padding: 4px 0;
+  min-width: 140px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  color: #fde68a;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.menu-item:hover {
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.menu-item-icon {
+  width: 12px;
+  height: 12px;
+  color: rgba(253, 230, 138, 0.5);
+  flex-shrink: 0;
+}
+
+.menu-star-active {
+  color: #f5c518;
+}
+
+/* ── Manga-themed modals ───────────────────────────────────────────── */
+.manga-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.manga-modal {
+    background: #1c0f05;
+    background-image: url("book-shelf-back.jpg");
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 8px;
+    padding: 24px 20px;
+    width: min(90vw, 360px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8);
+}
+
+.manga-modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fde68a;
+    letter-spacing: 0.06em;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+    margin-bottom: 4px;
+}
+
+.manga-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    color: #fde68a;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    box-sizing: border-box;
+}
+
+.manga-input::placeholder {
+    color: rgba(253, 230, 138, 0.35);
+}
+
+.manga-input:focus {
+    background: rgba(0, 0, 0, 0.65);
+    border-color: rgba(251, 191, 36, 0.7);
+}
+
+.manga-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.manga-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba(253, 230, 138, 0.5);
+}
+
+.manga-file-row {
+    width: 100%;
+}
+
+.manga-file-label {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px dashed rgba(251, 191, 36, 0.4);
+    background: rgba(0, 0, 0, 0.4);
+    color: rgba(253, 230, 138, 0.6);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.manga-file-label:hover {
+    border-color: rgba(251, 191, 36, 0.7);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fde68a;
+}
+
+.manga-file-input {
+    display: none;
+}
+
+.manga-preview {
+    width: 80px;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.manga-error {
+    color: #fca5a5;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.manga-modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.manga-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.manga-btn-ok {
+    background: rgba(251, 191, 36, 0.2);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+}
+
+.manga-btn-ok:hover {
+    background: rgba(251, 191, 36, 0.35);
+    border-color: rgba(251, 191, 36, 0.8);
+}
+
+.manga-btn-cancel {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(253, 230, 138, 0.5);
+}
+
+.manga-btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fde68a;
+}
