@@ -56,3 +56,17 @@ npm run dev
 - Search and sort
 - Right-click context menus
 - Mobile-responsive layout
+
+## Screenshots
+
+![Desktop bookshelf](docs/screenshots/bookshelf1.png)
+
+![Favorites](docs/screenshots/favorites.png)
+
+![Search](docs/screenshots/search.png)
+
+![Adding Content](docs/screenshots/add.png)
+
+![Mobile View](docs/screenshots/mobile1.png)
+
+![Mobile Menu](docs/screenshots/mobile-menu.png)
